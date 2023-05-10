@@ -25,6 +25,9 @@ String postName = "mmw451-test";
 
 Adafruit_VL6180X vl = Adafruit_VL6180X();
 
+int column[16] = { 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, A6, A7 };
+int layer[4] = { A3, A2, A1, A0 };
+
 void setup() {
   Serial.begin(9600);
   while(!Serial);
@@ -42,6 +45,13 @@ void setup() {
     while (1);
   }
   Serial.println("Sensor found!");
+
+  for (int i = 0; i < 16; i++) {
+    pinMode(column[i], OUTPUT);
+  }
+  for (int i = 0; i < 4; i++) {
+    pinMode(layer[i], OUTPUT);
+  }
 
   // print the SSID of the network you're attached to:
   Serial.print("SSID: ");
@@ -129,18 +139,138 @@ void loop() {
     } else {
       post(0);
       handDetected = false;
-      Serial.println("----------FLICKR-----------");
+      randomflicker();
     }
   } else {
     if (handDetected) {
-      if (!get()) Serial.println("--------FLICKER--------");
+      if (!get()) randomflicker();
     } else {
       handDetected = true;
       post(1);
-      if (get()) Serial.println("--------LIGHT UP LED CUBE--------");
+      if (get()) diagonalRectangle();
     }
   }
 
   Serial.println("Wait 1.2 seconds\n");
   delay(1200);
 }
+
+void randomflicker()
+{
+  turnEverythingOff();
+  int x = 10;
+  for(int i = 0; i !=750; i+=2)
+  {
+  int randomLayer = random(0,4);
+  int randomColumn = random(0,16);
+  
+  digitalWrite(layer[randomLayer], 1);
+  digitalWrite(column[randomColumn], 0);
+  delay(x);
+  digitalWrite(layer[randomLayer], 0);
+  digitalWrite(column[randomColumn], 1);
+  delay(x); 
+  }
+}
+
+void diagonalRectangle()
+{
+  int x = 350;
+  turnEverythingOff();
+  for(int count = 0; count<5; count++)
+  {
+    //top left
+    for(int i = 0; i<8; i++)
+    {
+      digitalWrite(column[i], 0);
+    }
+    digitalWrite(layer[3], 1);
+    digitalWrite(layer[2], 1);
+    delay(x);
+    turnEverythingOff();
+    //middle middle
+    for(int i = 4; i<12; i++)
+    {
+      digitalWrite(column[i], 0);
+    }
+    digitalWrite(layer[1], 1);
+    digitalWrite(layer[2], 1);
+    delay(x);
+    turnEverythingOff();
+    //bottom right
+    for(int i = 8; i<16; i++)
+    {
+      digitalWrite(column[i], 0);
+    }
+    digitalWrite(layer[0], 1);
+    digitalWrite(layer[1], 1);
+    delay(x);
+    turnEverythingOff();
+    //bottom middle
+    for(int i = 4; i<12; i++)
+    {
+      digitalWrite(column[i], 0);
+    }
+    digitalWrite(layer[0], 1);
+    digitalWrite(layer[1], 1);
+    delay(x);
+    turnEverythingOff();
+    //bottom left
+    for(int i = 0; i<8; i++)
+    {
+      digitalWrite(column[i], 0);
+    }
+    digitalWrite(layer[0], 1);
+    digitalWrite(layer[1], 1);
+    delay(x);
+    turnEverythingOff();
+    //middle middle
+    for(int i = 4; i<12; i++)
+    {
+      digitalWrite(column[i], 0);
+    }
+    digitalWrite(layer[1], 1);
+    digitalWrite(layer[2], 1);
+    delay(x);
+    turnEverythingOff();
+    //top right
+    for(int i = 8; i<16; i++)
+    {
+      digitalWrite(column[i], 0);
+    }
+    digitalWrite(layer[2], 1);
+    digitalWrite(layer[3], 1);
+    delay(x);
+    turnEverythingOff();
+    //top middle
+    for(int i = 4; i<12; i++)
+    {
+      digitalWrite(column[i], 0);
+    }
+    digitalWrite(layer[2], 1);
+    digitalWrite(layer[3], 1);
+    delay(x);
+    turnEverythingOff();
+  }
+  //top left
+  for(int i = 0; i<8; i++)
+  {
+    digitalWrite(column[i], 0);
+  }
+  digitalWrite(layer[3], 1);
+  digitalWrite(layer[2], 1);
+  delay(x);
+  turnEverythingOff();
+}
+
+void turnEverythingOff()
+ {
+   for(int i = 0; i<16; i++)
+   {
+     digitalWrite(column[i], 1);
+   }
+   for(int i = 0; i<4; i++)
+   {
+     digitalWrite(layer[i], 0);
+   }
+ }
