@@ -96,6 +96,7 @@ void loop() {
   } else {
     if (handDetected) {
       if (!get()) randomflicker();
+      else {diagonalRectangle();}
     } else {
       handDetected = true;
       post(1);
@@ -176,7 +177,7 @@ bool get() {
 
 void randomflicker() {
   turnEverythingOff();
-  int x = 50;
+  int x = 150;
   for (int i = 0; i != 50; i += 2) {
     int randomLayer = random(0, 4);
     int randomColumn = random(0, 16);
@@ -193,7 +194,7 @@ void randomflicker() {
 void diagonalRectangle() {
   int x = 350;
   turnEverythingOff();
-  for (int count = 0; count < 5; count++) {
+  for (int count = 0; count < 1; count++) {
     //top left
     for (int i = 0; i < 8; i++) {
       digitalWrite(column[i], 0);
@@ -275,6 +276,19 @@ void turnEverythingOff() {
   }
   for (int i = 0; i < 4; i++) {
     digitalWrite(layer[i], 0);
+  }
+}
+
+void turnEverythingOn()
+{
+  for(int i = 0; i<16; i++)
+  {
+    digitalWrite(column[i], 0);
+  }
+  //turning on layers
+  for(int i = 0; i<4; i++)
+  {
+    digitalWrite(layer[i], 1);
   }
 }
 
