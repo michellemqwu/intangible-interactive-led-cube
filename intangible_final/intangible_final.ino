@@ -32,7 +32,6 @@ void setup() {
   Serial.begin(9600);
   while (!Serial)
     ;
-
   for (int i = 0; i < 16; i++) {
     pinMode(column[i], OUTPUT);
   }
@@ -148,7 +147,7 @@ bool get() {
   String getPath = "/get/latest/dweet/for/" + getName;
 
   // send the GET request
-  Serial.println("making GET request");
+  // Serial.println("making GET request");
   client.get(getPath);
 
   // read the status code and body of the response
@@ -177,8 +176,8 @@ bool get() {
 
 void randomflicker() {
   turnEverythingOff();
-  int x = 150;
-  for (int i = 0; i != 50; i += 2) {
+  int x = 120;
+  for (int i = 0; i != 10; i += 1) {
     int randomLayer = random(0, 4);
     int randomColumn = random(0, 16);
 
